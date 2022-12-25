@@ -8,11 +8,19 @@ const winnersUrl = 'http://127.0.0.1:3000/winners'
 
 
 
-export async function getCarsPromise(page) {
-    let response = await fetch(garageURL + `?_page=${page}&_limit=7`)
-    let allCars = await response.json()
+export async function getCarsPromise(page = null) {
+    if (page == null) {
+        let response = await fetch(garageURL)
+        let allCars = await response.json()
+        return allCars
+    } else {
+        let response = await fetch(garageURL + `?_page=${page}&_limit=7`)
+        let allCars = await response.json()
+        return allCars
+    }
 
-    return allCars
+
+
 }
 
 /*===============
