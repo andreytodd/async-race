@@ -14,12 +14,15 @@ import {
     deleteWinner,
     updateWinner
 } from './store/serverAPI.js'
-import { render, renderCars, updateAndRenderCar, } from './view/render.js'
+import { render, renderCars, updateAndRenderCar, createRandomCar } from './view/render.js'
 import  Header  from './view/components/Header.js'
 import Main from './view/components/Main.js'
 import Form from './view/components/Form.js'
 import RaceButtons from './view/components/RaceButtons.js'
 import Footer from './view/components/Footer.js'
+import { carAnimation, driveTiming } from './view/animation/CarMovement.js'
+
+
 
 /*=================
 Create HTML structure
@@ -28,7 +31,6 @@ Create HTML structure
 const wrapper = document.createElement('div')
 wrapper.id = 'wrapper'
 document.body.prepend(wrapper)
-
 
 wrapper.append(Header)
 wrapper.append(Main)
@@ -45,7 +47,7 @@ checkNextBtn()
 Define elements
 =================*/
 
-
+let garage = document.getElementById('garage')
 
 /* Form elements */
 
@@ -68,16 +70,20 @@ const nextBtn = document.querySelector('.next-btn')
 
 
 /*=================
-Add event listeners
+Garage page event listeners
 =================*/
 
 /* Form create and update button listeners */
 
 createBtn.addEventListener('click', function() {
     garage.innerHTML = ''
-    createCar(createName.value, createColor.value)
+    if (createName.value === '') {
+        createRandomCar()
+    } else {
+        createCar(createName.value, createColor.value)
+    }
     createName.value = ''
-    setTimeout(() => renderCars(pageNumber.innerHTML), 100)
+    setTimeout(() => renderCars(pageNumber.innerHTML), 0)
     checkNextBtn()
 })
 
@@ -89,9 +95,20 @@ updateBtn.addEventListener('click', function() {
     }
 })
 
+
+/* Race buttons listeners */
+
+generateBtn.addEventListener('click', function() {
+    for (let i = 0; i < 100; i++) {
+        createRandomCar()
+    }
+    setTimeout(() => renderCars(pageNumber.innerHTML), 100)
+    checkNextBtn()
+})
+
 /* Cars select and delete button listeners */
 
-document.addEventListener('click', function(event) {
+garage.addEventListener('click', function(event) {
     if (event.target.classList.value === 'select-btn') {
         getCarPromise(event.target.dataset.id)
             .then(data => {
@@ -103,12 +120,25 @@ document.addEventListener('click', function(event) {
     }
 })
 
-document.addEventListener('click', function(event) {
+garage.addEventListener('click', function(event) {
     if (event.target.classList.value === 'remove-btn') {
-        event.target.parentNode.remove()
+        garage.innerHTML = ''
         deleteCar(event.target.dataset.id)
+        setTimeout(() => renderCars(pageNumber.innerHTML), 0)
+        checkNextBtn()
     }
 })
+
+garage.addEventListener('click', function(event) {
+    if (event.target.classList.value === 'single-race-btn') {
+        let raceButton = event.target
+        raceButton.disabled = true
+        let id = event.target.dataset.id
+        startEngineAndDrive(id)
+    }
+})
+
+
 
 /* Footer previous and next button listeners */
 
@@ -135,15 +165,46 @@ previousBtn.addEventListener('click', function() {
     }
 })
 
+/*=================
+Functions
+=================*/
+
+/* Helper function to disable Next btn */
+
 function checkNextBtn() {
 	getCarsPromise()
 		.then(data => {
-			if (+pageNumber.innerHTML === Math.ceil((data.length) / 7)) {
+			if (+pageNumber.innerHTML >= Math.ceil((data.length) / 7)) {
 				nextBtn.disabled = true
 			} else {
                 nextBtn.disabled = false
             }
 		})
 };
+
+/* Start And Drive function */
+
+
+function startEngineAndDrive(id) {
+    let selectedCar = document.getElementById(id)
+        startEngine(id)
+            .then(response => response.json())
+            .then(data => {
+                selectedCar.classList.add('animated')
+                let animationTime = data.distance / 1000 / data.velocity + 's'
+                selectedCar.style.animationDuration = (animationTime)
+            })
+            .then(driveStart(id)
+                .then(response => response.json())
+                .then(data => console.log(data))
+                .catch(err => {
+                    selectedCar.classList.add('paused')
+                    console.log(err)
+                })
+                )
+    }
+
+
+
 
 

@@ -1,5 +1,5 @@
 const Form = document.createElement('div')
-Form.classList.add('garage__cars-form')
+Form.classList.add('garage-page__cars-form')
 Form.innerHTML = `
     <div class="cars-form create-car">
         <div class="create-car__input">

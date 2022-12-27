@@ -1,0 +1,39 @@
+.garage__car {
+    height: 170px;
+    position: relative;
+}
+
+.car__racer {
+    position: relative;
+}
+
+.car__racer svg.animated {
+    position: absolute;
+    -webkit-animation: linear;
+    -webkit-animation-name: drive;
+   animation-fill-mode: forwards;
+}
+
+.car__racer svg.paused{
+        -webkit-animation-play-state:paused;
+        -moz-animation-play-state:paused;
+        -o-animation-play-state:paused;
+        animation-play-state:paused;
+    }
+
+
+@-webkit-keyframes drive {
+    0% {
+      left: 0;
+    }
+    100% {
+      left: 85vw;
+    }
+  }
+
+
+
+
+
+
+

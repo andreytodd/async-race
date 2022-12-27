@@ -81,17 +81,11 @@ export async function getCarsPromise(page = null) {
 ===============*/
 
 export async function startEngine(id) {
-    try {
-        fetch(engineUrl + `?id=${id}&status=started`, {
+    return fetch(engineUrl + `?id=${id}&status=started`, {
             method: 'PATCH',
-        })
-            .then(response => response.json())
-            .then(data => console.log(data))
-    } catch(err) {
-        console.log(err)
-    }
-
+    })
 }
+
 
 /*===============
 ===============*/
@@ -106,13 +100,10 @@ export async function startEngine(id) {
 ===============*/
 
 
-export function driveStart(id) {
-        fetch(engineUrl + `?id=${id}&status=drive`, {
-            method: 'PATCH'
-        })
-            .then(response => response.json())
-            .then(data => console.log(data))
-            .catch(err => console.log(err))
+export async function driveStart(id) {
+    return fetch(engineUrl + `?id=${id}&status=drive`, {
+        method: 'PATCH'
+    })
 }
 
 /*===============
