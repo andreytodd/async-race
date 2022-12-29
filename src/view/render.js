@@ -1,6 +1,8 @@
-import {getCarsPromise, updateCar, createCar} from '../store/serverAPI.js'
-import { CarBlock } from './components/CarBlock.js';
+import {getCarsPromise, updateCar, createCar, getWinners, getCarPromise} from '../store/serverAPI.js'
+import { CarBlock } from './components/Garage/CarBlock.js';
+import { WinnersCarBlock } from './components/Winners/WinnersCarBlock.js';
 import { randomColor, randomCar } from '../store/carData.js';
+
 
 export function render (template, node) {
 	if (!node) return;
@@ -17,6 +19,21 @@ export function renderCars(page) {
         garage.append(carDiv)
     }))
 };
+
+export async function renderWinners(page, sort, order) {
+	winsTable.innerHTML = ''
+	getWinners(page, sort, order)
+		.then(winners => winners.forEach(winner => {
+			let winnerDiv = document.createElement('div')
+			winnerDiv.classList.add('winners-table__car')
+			let winnerCar = getCarPromise(winner.id)
+			winnerCar
+				.then(info => {
+					render(WinnersCarBlock(winner.id, info.name, info.color), winnerDiv)
+				})
+			winsTable.append(winnerDiv)
+		}))
+}
 
 export function updateAndRenderCar(name, color, id) {
     let selectedCar = document.getElementById(`id_${id}`)

@@ -1,7 +1,7 @@
 const Header = document.createElement('header')
 Header.innerHTML = `
-    <a>Garage</a>
-    <a>Winners</a>
+    <a id="garage-switcher">Garage</a>
+    <a id="winners-switcher">Winners</a>
 `
 
 export default Header

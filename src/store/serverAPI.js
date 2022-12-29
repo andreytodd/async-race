@@ -23,6 +23,15 @@ export async function getCarsPromise(page = null) {
 
 }
 
+export async function getWinners(page = 1, sort, order = 'ASC') {
+    let response = await fetch(winnersUrl + `?_page=${page}&_limit=10&_sort=${sort}&_order=${order}`)
+    let winners = await response.json()
+    return winners
+
+    // return fetch(winnersUrl)
+    //         .then(response => response.json())
+}
+
 /*===============
 ===============*/
 
@@ -80,10 +89,11 @@ export async function getCarsPromise(page = null) {
 /*===============
 ===============*/
 
-export async function startEngine(id) {
+export function startEngine(id) {
     return fetch(engineUrl + `?id=${id}&status=started`, {
             method: 'PATCH',
     })
+    .then(response => response.json())
 }
 
 
@@ -106,34 +116,17 @@ export async function driveStart(id) {
     })
 }
 
-/*===============
-===============*/
-
-export async function startNDrive(id) {
-    try {
-        startEngine(id)
-            .then(driveStart(id))
-    } catch(err) {
-        console.log(err)
-    }
-}
 
 /*===============
 ===============*/
 
-export async function getWinners() {
-    fetch(winnersUrl)
-        .then(response => response.json())
-        .then(data => console.log(data))
-}
+
 
 /*===============
 ===============*/
 
 export async function getWinner(id) {
-    fetch(winnersUrl + `/${id}`)
-        .then(response => response.json())
-        .then(data => console.log(data))
+    return fetch(winnersUrl + `/${id}`)
 }
 
 /*===============
