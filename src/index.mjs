@@ -12,7 +12,7 @@ import {
     deleteWinner,
     updateWinner
 } from './store/serverAPI.js'
-import { renderCars, updateAndRenderCar, createRandomCar, renderWinners } from './view/render.js'
+import { renderCars, updateAndRenderCar, createRandomCar, renderWinners, updateWinnersCount } from './view/render.js'
 import  Header  from './view/components/Main/Header.js'
 import Main from './view/components/Main/Main.js'
 import Form from './view/components/Garage/Form.js'
@@ -50,12 +50,8 @@ checkNextGarage()
 const winnersPage = document.getElementById('winners-page')
 winnersPage.append(WinnersCount)
 winnersPage.append(WinnersTable)
-getWinners(1, 'time', 'ASC')
-    .then(data => {
-        WinnersCount.textContent = `Winners (${data.length})`
-        console.log(data)
-        return data
-})
+updateWinnersCount()
+
 
 renderWinners()
 
@@ -136,22 +132,23 @@ raceBtn.addEventListener('click', async function() {
     resetBtn.disabled = true
     raceBtn.disabled = true
     let allRacers = document.querySelectorAll('.car__racer__svg')
-    let promiseList = []
+    let startEnginePromises = []
     raceResults = {}
     allRacers.forEach(racer => {
-        promiseList.push(startEngineAndAnimation(racer.id))
+        startEnginePromises.push(startEngineAndAnimation(racer.id))
     })
-    Promise.all(promiseList)
-        .then(
-            allRacers.forEach(racer => {
-            startRace(racer.id)
-        })
-    )
-
+    await Promise.all(startEnginePromises)
+    let startDrivePromises = []
+    allRacers.forEach(racer => {
+        startDrivePromises.push(startRace(racer.id))
+    })
+    await Promise.all(startDrivePromises)
+    announceWinner()
+    resetBtn.disabled = false
     setTimeout(() => {
-        announceWinner()
-        resetBtn.disabled = false
-    }, 10000)
+        renderWinners()
+        updateWinnersCount()
+    }, 2000)
 })
 
 resetBtn.addEventListener('click', async function() {
@@ -272,20 +269,21 @@ async function startEngineAndAnimation(id) {
     await startEngine(id)
         .then(data => {
             selectedCar.classList.add('animated')
-            let animationTime = (data.distance / 1000 / data.velocity).toFixed(2) + 's'
-            selectedCar.style.animationDuration = (animationTime)
-            raceResults[id] = +animationTime.slice(0, -1)
+            let animationTime = (data.distance / 1000 / data.velocity).toFixed(2)
+            selectedCar.style.animationDuration = ((animationTime + 1) + 's')
+            raceResults[id] = +animationTime
     })
 }
 
 async function startRace(id) {
     let selectedCar = document.getElementById(id)
-    driveStart(id)
+    await driveStart(id)
             .then(response => response.json())
             .catch(err => {
                 raceResults[id] = 10000
                 selectedCar.classList.add('paused')
                 console.log(err)
+                console.log(`I am broken! ${id}`)
             })
 }
 
