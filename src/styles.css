@@ -1,3 +1,11 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-image: linear-gradient(to right, #434343 0%, rgb(38, 33, 33) 100%);
+    color: #FFF;
+
+}
+
 .garage__car {
     height: 170px;
     position: relative;
@@ -30,6 +38,37 @@
       left: 85vw;
     }
   }
+
+.winners {
+    width: 80vw;
+}
+
+.winners__heading {
+    display: flex;
+    justify-content: space-between;
+}
+
+.winners__table__car {
+    display: flex;
+    justify-content: space-between;
+}
+
+.winners__table__car__info {
+    display: flex;
+    width: 65vw;
+    justify-content: space-between;
+}
+
+.winners__table__car__image {
+    align-content: flex-end;
+}
+
+button {
+
+}
+
+
+
 
 
 

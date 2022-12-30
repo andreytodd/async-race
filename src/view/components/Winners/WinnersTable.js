@@ -1,10 +1,6 @@
 let WinnersTable = document.createElement('div')
-WinnersTable.classList.add('winners-table')
+WinnersTable.classList.add('winners__table')
 WinnersTable.id = 'winsTable'
-WinnersTable.innerHTML = `
-    <p>ID</p>
-    <p>CAR</p>
-`
 
 
 export default WinnersTable

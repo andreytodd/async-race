@@ -23,13 +23,30 @@ export async function getCarsPromise(page = null) {
 
 }
 
-export async function getWinners(page = 1, sort, order = 'ASC') {
-    let response = await fetch(winnersUrl + `?_page=${page}&_limit=10&_sort=${sort}&_order=${order}`)
-    let winners = await response.json()
-    return winners
+export async function getWinners(page = null, sort, order = 'ASC') {
+    if (page === null) {
+        let response = await fetch(winnersUrl)
+        let allWinners = await response.json()
+        return allWinners
+    } else {
+        let response = await fetch(winnersUrl + `?_page=${page}&_limit=10&_sort=${sort}&_order=${order}`)
+        let winners = await response.json()
+        return winners
+    }
 
-    // return fetch(winnersUrl)
-    //         .then(response => response.json())
+}
+
+// export async function getWinners(page = 1, sort, order = 'ASC') {
+//     let response = await fetch(winnersUrl + `?_page=${page}&_limit=10&_sort=${sort}&_order=${order}`)
+//     let winners = await response.json()
+//     return winners
+// }
+
+export async function getAllWinners() {
+    let response = await fetch(winnersUrl)
+    let allWinners = await response.json()
+
+    return allWinners
 }
 
 /*===============

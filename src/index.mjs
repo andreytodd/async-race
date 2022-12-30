@@ -6,11 +6,12 @@ import {
     startEngine,
     stopEngine,
     driveStart,
-    getWinners,
     getWinner,
     createWinner,
     deleteWinner,
-    updateWinner
+    updateWinner,
+    getWinners,
+    getAllWinners
 } from './store/serverAPI.js'
 import { renderCars, updateAndRenderCar, createRandomCar, renderWinners, updateWinnersCount } from './view/render.js'
 import  Header  from './view/components/Main/Header.js'
@@ -20,6 +21,9 @@ import RaceButtons from './view/components/Garage/RaceButtons.js'
 import PagesGarage from './view/components/Garage/PagesGarage.js'
 import WinnersCount from './view/components/Winners/WinnersCount.js'
 import WinnersTable from './view/components/Winners/WinnersTable.js'
+import WinnersHeading from './view/components/Winners/WinnersHeading.js'
+import WinnersTableDiv from './view/components/Winners/WinnersTableDiv.js'
+import WinnersPagination from './view/components/Winners/WinnersPagination.js'
 
 
 
@@ -41,30 +45,40 @@ garagePage.prepend(RaceButtons)
 garagePage.prepend(Form)
 garagePage.append(PagesGarage)
 
-let pageNumber = document.getElementById('page-number')
-renderCars(pageNumber.innerHTML)
+let pageNumberGarage = document.getElementById('page-number')
+renderCars(pageNumberGarage.innerHTML)
 checkNextGarage()
 
 /* Winners Page rendering */
 
 const winnersPage = document.getElementById('winners-page')
 winnersPage.append(WinnersCount)
-winnersPage.append(WinnersTable)
+winnersPage.append(WinnersTableDiv)
+WinnersTableDiv.append(WinnersHeading)
+WinnersTableDiv.append(WinnersTable)
 updateWinnersCount()
+winnersPage.append(WinnersPagination)
 
-
+let pageNumberWinners = document.getElementById('page-number-winners')
 renderWinners()
+checkNextWinners()
+
 
 /*=================
 Define elements
 =================*/
 
+/* General elements */
+
 const garage = document.getElementById('garage')
+const garageSwitcher = document.getElementById('garage-switcher')
+const winnersSwitcher = document.getElementById('winners-switcher')
+let selectedId
+let raceResults = {}
+let winsTable = document.getElementById('winsTable')
 
 /* Form elements */
 
-const garageSwitcher = document.getElementById('garage-switcher')
-const winnersSwitcher = document.getElementById('winners-switcher')
 const raceBtn = document.querySelector('.race-btn')
 const resetBtn = document.querySelector('.reset-btn')
 const generateBtn = document.querySelector('.generate-btn')
@@ -74,13 +88,16 @@ const createBtn = document.getElementById('create-btn')
 const updateName = document.getElementById('name-update')
 const updateColor = document.getElementById('color-update')
 const updateBtn = document.getElementById('update-btn')
-let selectedId
-let raceResults = {}
 
 /* Footer buttons */
 
 const previousBtn = document.querySelector('.previous-btn')
 const nextBtn = document.querySelector('.next-btn')
+const previousBtnWinners = document.querySelector('.previous-btn-winners')
+const nextBtnWinners = document.querySelector('.next-btn-winners')
+let order
+let sortBy
+
 
 /*=================
 Switchers event listeners
@@ -90,12 +107,16 @@ garageSwitcher.addEventListener('click', function() {
     garagePage.style.visibility = ''
     garagePage.style.position = ''
     winnersPage.style.visibility = 'hidden'
+    winnersPage.style.position = 'absolute'
 })
 
 winnersSwitcher.addEventListener('click', function() {
     garagePage.style.visibility = 'hidden'
     garagePage.style.position = 'absolute'
+    garagePage.style.top = '-1000px'
     winnersPage.style.visibility = 'visible'
+    winnersPage.style.position = ''
+    winnersPage.style.top = '0px'
 })
 
 
@@ -113,7 +134,7 @@ createBtn.addEventListener('click', function() {
         createCar(createName.value, createColor.value)
     }
     createName.value = ''
-    renderCars(pageNumber.innerHTML)
+    renderCars(pageNumberGarage.innerHTML)
     checkNextGarage()
 })
 
@@ -168,7 +189,7 @@ generateBtn.addEventListener('click', function() {
     for (let i = 0; i < 100; i++) {
         createRandomCar()
     }
-    setTimeout(() => renderCars(pageNumber.innerHTML), 100)
+    setTimeout(() => renderCars(pageNumberGarage.innerHTML), 100)
     checkNextGarage()
 })
 
@@ -193,7 +214,7 @@ garage.addEventListener('click', async function(event) {
         checkNextGarage()
         deleteCar(id)
         deleteWinner(id)
-        renderCars(pageNumber.innerHTML)
+        renderCars(pageNumberGarage.innerHTML)
     }
 })
 
@@ -221,25 +242,70 @@ garage.addEventListener('click', function(event) {
 /* Footer previous and next button listeners */
 
 nextBtn.addEventListener('click', function() {
-    pageNumber.innerHTML = (Number(pageNumber.innerHTML) + 1)
+    pageNumberGarage.innerHTML = (Number(pageNumberGarage.innerHTML) + 1)
     previousBtn.disabled = false
     garage.innerHTML = ''
-    renderCars(pageNumber.innerHTML)
+    renderCars(pageNumberGarage.innerHTML)
     checkNextGarage()
 })
 
 previousBtn.addEventListener('click', function() {
-    if (pageNumber.innerHTML === '2') {
-        pageNumber.innerHTML = (Number(pageNumber.innerHTML) - 1)
+    if (pageNumberGarage.innerHTML === '2') {
+        pageNumberGarage.innerHTML = (Number(pageNumberGarage.innerHTML) - 1)
         garage.innerHTML = ''
-        renderCars(pageNumber.innerHTML)
+        renderCars(pageNumberGarage.innerHTML)
         previousBtn.disabled = true
         checkNextGarage()
     } else {
-        pageNumber.innerHTML = (Number(pageNumber.innerHTML) - 1)
+        pageNumberGarage.innerHTML = (Number(pageNumberGarage.innerHTML) - 1)
         garage.innerHTML = ''
-        renderCars(pageNumber.innerHTML)
+        renderCars(pageNumberGarage.innerHTML)
         checkNextGarage()
+    }
+})
+
+/*=================
+Winners page event listeners
+=================*/
+
+/* Sort table of winners */
+
+WinnersHeading.addEventListener('click', function(event) {
+    sortBy = event.target.dataset.sort
+    order = event.target.dataset.order
+    if (!event.target.dataset.sort) {
+        return
+    } else if (order === 'ASC') {
+        renderWinners(1, sortBy, order)
+        event.target.dataset.order = 'DESC'
+    } else {
+        renderWinners(1, sortBy, order)
+        event.target.dataset.order = 'ASC'
+    }
+})
+
+/* Footer previous and next button listeners */
+
+nextBtnWinners.addEventListener('click', function() {
+    pageNumberWinners.innerHTML = (Number(pageNumberWinners.innerHTML) + 1)
+    previousBtnWinners.disabled = false
+    winsTable.innerHTML = ''
+    renderWinners(pageNumberWinners.innerHTML, sortBy, order)
+    checkNextWinners()
+})
+
+previousBtnWinners.addEventListener('click', function() {
+    if (pageNumberWinners.innerHTML === '2') {
+        pageNumberWinners.innerHTML = (Number(pageNumberWinners.innerHTML) - 1)
+        winsTable.innerHTML = ''
+        renderWinners(pageNumberGarage.innerHTML, sortBy, order)
+        previousBtnWinners.disabled = true
+        checkNextWinners()
+    } else {
+        pageNumberWinners.innerHTML = (Number(pageNumberWinners.innerHTML) - 1)
+        winsTable.innerHTML = ''
+        renderWinners(pageNumberGarage.innerHTML, sortBy, order)
+        checkNextWinners()
     }
 })
 
@@ -252,13 +318,30 @@ Functions
 function checkNextGarage() {
 	getCarsPromise()
 		.then(data => {
-			if (+pageNumber.innerHTML >= Math.ceil((data.length) / 7)) {
+			if (+pageNumberGarage.innerHTML >= Math.ceil((data.length) / 7)) {
 				nextBtn.disabled = true
 			} else {
                 nextBtn.disabled = false
             }
 		})
 };
+
+function checkNextWinners() {
+	getAllWinners()
+		.then(data => {
+			if (+pageNumberWinners.innerHTML >= Math.ceil((data.length) / 10)) {
+                console.log(Math.ceil((data.length) / 10))
+				nextBtnWinners.disabled = true
+			} else {
+                nextBtnWinners.disabled = false
+            }
+		})
+};
+
+
+
+getWinners()
+    .then(data => console.log(data))
 
 /* Race functions */
 
@@ -283,7 +366,7 @@ async function startRace(id) {
                 raceResults[id] = 10000
                 selectedCar.classList.add('paused')
                 console.log(err)
-                console.log(`I am broken! ${id}`)
+                console.log(`Number ${id} has broken down!`)
             })
 }
 

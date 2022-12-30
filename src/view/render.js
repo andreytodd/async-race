@@ -1,8 +1,8 @@
 import {getCarsPromise, updateCar, createCar, getWinners, getCarPromise} from '../store/serverAPI.js'
 import { CarBlock } from './components/Garage/CarBlock.js';
-import { WinnersCarBlock } from './components/Winners/WinnersCarBlock.js';
 import { randomColor, randomCar } from '../store/carData.js';
 import WinnersCount from './components/Winners/WinnersCount.js';
+import WinnersHeading from './components/Winners/WinnersHeading.js';
 
 
 export function render (template, node) {
@@ -20,8 +20,6 @@ export function renderCars(page) {
         garage.append(carDiv)
     }))
 };
-
-
 
 export function updateAndRenderCar(name, color, id) {
     let selectedCar = document.getElementById(`id_${id}`)
@@ -47,18 +45,12 @@ export async function renderWinners(page, sort, order) {
 	getWinners(page, sort, order)
 		.then(winners => winners.forEach(winner => {
 			let winnerDiv = document.createElement('div')
-			winnerDiv.classList.add('winners-table__car')
+			winnerDiv.classList.add('winners__table__car')
 
 			getCarPromise(winner.id)
 				.then(info => {
 					winnerDiv.innerHTML = `
-				<div>
-				<p>ID: ${winner.id}</p>
-				<p>Best time: ${winner.time}</p>
-				<p>Name: ${info.name}</p>
-				<p>Wins: ${winner.wins}</p>
-				</div>
-				<div>
+				<div class="winners__table__car__image">
 				<svg class="winner-img" xmlns="http://www.w3.org/2000/svg" version="1.0" width="70pt" height="35.000000pt" viewBox="0 0 1280.000000 640.000000" preserveAspectRatio="xMidYMid meet">
 
     <g transform="translate(0.000000,640.000000) scale(0.100000,-0.100000)" fill="${info.color}" stroke="none">
@@ -94,10 +86,18 @@ export async function renderWinners(page, sort, order) {
     </g>
     </svg>
 	</div>
+
+		<div class="winners__table__car__info">
+				<p>${info.name}</p>
+				<p>ID: ${winner.id}</p>
+				<p>Wins: ${winner.wins}</p>
+				<p>Best time: ${winner.time}</p>
+		</div>
 			`
 				})
 			winsTable.append(winnerDiv)
 		}))
+
 }
 
 
