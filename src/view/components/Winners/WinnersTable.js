@@ -1,4 +1,4 @@
-let WinnersTable = document.createElement('div')
+let WinnersTable = document.createElement('table')
 WinnersTable.classList.add('winners__table')
 WinnersTable.id = 'winsTable'
 

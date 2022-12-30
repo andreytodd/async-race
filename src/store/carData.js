@@ -19,7 +19,8 @@ const models = ['A3', 'A4', 'A5', 'A6', 'A8', 'GSX', 'Stealth', 'CL-X',
 
 export  function randomCar() {
     return brands[Math.floor(Math.random() * brands.length)] + ' ' + models[Math.floor(Math.random() * models.length)]
-}
+};
+
 export function randomColor() {
 	var letters = '0123456789ABCDEF';
 	var color = '#';
@@ -27,4 +28,4 @@ export function randomColor() {
 	  color += letters[Math.floor(Math.random() * 16)];
 	}
 	return color;
-}
+};

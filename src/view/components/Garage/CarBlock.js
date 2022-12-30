@@ -6,7 +6,7 @@ export function CarBlock(name, color, id) {
     <button class="remove-btn" data-id="${id}">Remove</button>
     <button class="single-race-btn" data-id="${id}">Start race</button>
     <button class="single-stop-btn" data-id="${id}">End race</button>
-    <p>${name}</p>
+    <p>Nr ${id}: ${name}</p>
     <div class="car__racer">
         ${carImage(color, id)}
     </div>

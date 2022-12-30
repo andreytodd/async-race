@@ -2,7 +2,7 @@ import {getCarsPromise, updateCar, createCar, getWinners, getCarPromise} from '.
 import { CarBlock } from './components/Garage/CarBlock.js';
 import { randomColor, randomCar } from '../store/carData.js';
 import WinnersCount from './components/Winners/WinnersCount.js';
-import WinnersHeading from './components/Winners/WinnersHeading.js';
+import GarageCount from './components/Garage/GarageCount.js';
 
 
 export function render (template, node) {
@@ -34,23 +34,28 @@ export function createRandomCar() {
 )}
 
 export async function updateWinnersCount() {
-    getWinners(1, 'time', 'ASC')
+    getWinners()
     .then(data => {
         WinnersCount.textContent = `Winners (${data.length})`
 })
+}
+
+export async function updateGarageCount() {
+	getCarsPromise()
+		.then(data => GarageCount.textContent = `Garage (${data.length})`)
 }
 
 export async function renderWinners(page, sort, order) {
 	winsTable.innerHTML = ''
 	getWinners(page, sort, order)
 		.then(winners => winners.forEach(winner => {
-			let winnerDiv = document.createElement('div')
+			let winnerDiv = document.createElement('tr')
 			winnerDiv.classList.add('winners__table__car')
 
 			getCarPromise(winner.id)
 				.then(info => {
 					winnerDiv.innerHTML = `
-				<div class="winners__table__car__image">
+				<td class="winners__table__car__image">
 				<svg class="winner-img" xmlns="http://www.w3.org/2000/svg" version="1.0" width="70pt" height="35.000000pt" viewBox="0 0 1280.000000 640.000000" preserveAspectRatio="xMidYMid meet">
 
     <g transform="translate(0.000000,640.000000) scale(0.100000,-0.100000)" fill="${info.color}" stroke="none">
@@ -85,20 +90,28 @@ export async function renderWinners(page, sort, order) {
     <path d="M11033 1803 c-10 -3 -13 -47 -13 -169 0 -90 4 -164 8 -164 36 0 186 61 239 98 16 10 -216 242 -234 235z"/>
     </g>
     </svg>
-	</div>
+	</td>
 
-		<div class="winners__table__car__info">
-				<p>${info.name}</p>
-				<p>ID: ${winner.id}</p>
-				<p>Wins: ${winner.wins}</p>
-				<p>Best time: ${winner.time}</p>
-		</div>
+
+				<td>${info.name}</td>
+				<td>ID: ${winner.id}</td>
+				<td>Wins: ${winner.wins}</td>
+				<td>Best time: ${winner.time}</td>
+
 			`
 				})
 			winsTable.append(winnerDiv)
 		}))
 
 }
+
+
+{/* <td class="winners__table__car__info">
+<p>${info.name}</p>
+<p>ID: ${winner.id}</p>
+<p>Wins: ${winner.wins}</p>
+<p>Best time: ${winner.time}</p>
+</td> */}
 
 
 

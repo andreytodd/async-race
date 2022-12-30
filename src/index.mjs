@@ -13,12 +13,13 @@ import {
     getWinners,
     getAllWinners
 } from './store/serverAPI.js'
-import { renderCars, updateAndRenderCar, createRandomCar, renderWinners, updateWinnersCount } from './view/render.js'
+import { renderCars, updateAndRenderCar, createRandomCar, renderWinners, updateWinnersCount, updateGarageCount } from './view/render.js'
 import  Header  from './view/components/Main/Header.js'
 import Main from './view/components/Main/Main.js'
 import Form from './view/components/Garage/Form.js'
 import RaceButtons from './view/components/Garage/RaceButtons.js'
 import PagesGarage from './view/components/Garage/PagesGarage.js'
+import GarageCount from './view/components/Garage/GarageCount.js'
 import WinnersCount from './view/components/Winners/WinnersCount.js'
 import WinnersTable from './view/components/Winners/WinnersTable.js'
 import WinnersHeading from './view/components/Winners/WinnersHeading.js'
@@ -41,6 +42,8 @@ wrapper.append(Main)
 /* Garage Page rendering */
 
 const garagePage = document.getElementById('garage-page')
+garagePage.prepend(GarageCount)
+updateGarageCount()
 garagePage.prepend(RaceButtons)
 garagePage.prepend(Form)
 garagePage.append(PagesGarage)
@@ -60,7 +63,7 @@ updateWinnersCount()
 winnersPage.append(WinnersPagination)
 
 let pageNumberWinners = document.getElementById('page-number-winners')
-renderWinners()
+renderWinners(1)
 checkNextWinners()
 
 
@@ -91,8 +94,8 @@ const updateBtn = document.getElementById('update-btn')
 
 /* Footer buttons */
 
-const previousBtn = document.querySelector('.previous-btn')
-const nextBtn = document.querySelector('.next-btn')
+const previousBtn = document.querySelector('.pagination__previous-btn')
+const nextBtn = document.querySelector('.pagination__next-btn')
 const previousBtnWinners = document.querySelector('.previous-btn-winners')
 const nextBtnWinners = document.querySelector('.next-btn-winners')
 let order
@@ -136,6 +139,7 @@ createBtn.addEventListener('click', function() {
     createName.value = ''
     renderCars(pageNumberGarage.innerHTML)
     checkNextGarage()
+    updateGarageCount()
 })
 
 updateBtn.addEventListener('click', function() {
@@ -167,9 +171,11 @@ raceBtn.addEventListener('click', async function() {
     announceWinner()
     resetBtn.disabled = false
     setTimeout(() => {
-        renderWinners()
+        renderWinners(1, sortBy, order)
         updateWinnersCount()
+        checkNextWinners()
     }, 2000)
+
 })
 
 resetBtn.addEventListener('click', async function() {
@@ -211,10 +217,15 @@ garage.addEventListener('click', async function(event) {
     if (event.target.classList.value === 'remove-btn') {
         let id = event.target.dataset.id
         garage.innerHTML = ''
-        checkNextGarage()
         deleteCar(id)
         deleteWinner(id)
+        updateGarageCount()
         renderCars(pageNumberGarage.innerHTML)
+        renderWinners(1, sortBy, order)
+        pageNumberWinners.innerHTML = '1'
+        updateWinnersCount()
+        checkNextGarage()
+        checkNextWinners()
     }
 })
 
@@ -237,9 +248,7 @@ garage.addEventListener('click', function(event) {
     }
 })
 
-
-
-/* Footer previous and next button listeners */
+/* Previous and next button listeners */
 
 nextBtn.addEventListener('click', function() {
     pageNumberGarage.innerHTML = (Number(pageNumberGarage.innerHTML) + 1)
@@ -284,7 +293,7 @@ WinnersHeading.addEventListener('click', function(event) {
     }
 })
 
-/* Footer previous and next button listeners */
+/* Previous and next button listeners */
 
 nextBtnWinners.addEventListener('click', function() {
     pageNumberWinners.innerHTML = (Number(pageNumberWinners.innerHTML) + 1)
@@ -298,13 +307,13 @@ previousBtnWinners.addEventListener('click', function() {
     if (pageNumberWinners.innerHTML === '2') {
         pageNumberWinners.innerHTML = (Number(pageNumberWinners.innerHTML) - 1)
         winsTable.innerHTML = ''
-        renderWinners(pageNumberGarage.innerHTML, sortBy, order)
         previousBtnWinners.disabled = true
         checkNextWinners()
+        renderWinners(pageNumberWinners.innerHTML, sortBy, order)
     } else {
         pageNumberWinners.innerHTML = (Number(pageNumberWinners.innerHTML) - 1)
         winsTable.innerHTML = ''
-        renderWinners(pageNumberGarage.innerHTML, sortBy, order)
+        renderWinners(pageNumberWinners.innerHTML, sortBy, order)
         checkNextWinners()
     }
 })
@@ -330,15 +339,12 @@ function checkNextWinners() {
 	getAllWinners()
 		.then(data => {
 			if (+pageNumberWinners.innerHTML >= Math.ceil((data.length) / 10)) {
-                console.log(Math.ceil((data.length) / 10))
 				nextBtnWinners.disabled = true
 			} else {
                 nextBtnWinners.disabled = false
             }
 		})
 };
-
-
 
 getWinners()
     .then(data => console.log(data))
