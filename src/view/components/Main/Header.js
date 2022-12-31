@@ -4,7 +4,7 @@ Header.innerHTML = `
     <a class="switcher" id="garage-switcher">Garage Page</a>
     <a class="switcher" id="winners-switcher">Winners Page</a>
     </div>
-    <h1>A<span class="glow">SYN</span>C RACE</h1>
+    <h1>ASYNC RACE</h1>
 `
 
 export default Header
