@@ -13,7 +13,7 @@ Form.innerHTML = `
             <input id="name-update" type="text" disabled="true">
             <input id="color-update" type="color">
         </div>
-        <button id="update-btn">Update</button>
+        <button id="update-btn" disabled="true">Update</button>
     </div>
 `
 

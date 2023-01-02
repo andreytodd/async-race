@@ -146,6 +146,7 @@ updateBtn.addEventListener('click', function() {
     if (updateName.value !== '') {
         updateAndRenderCar(updateName.value, updateColor.value, selectedId)
         updateName.disabled = true
+        updateBtn.disabled = true
         updateName.value =''
     }
 })
@@ -203,6 +204,7 @@ generateBtn.addEventListener('click', function() {
 
 garage.addEventListener('click', function(event) {
     if (event.target.classList.value === 'select-btn') {
+        updateBtn.disabled = false
         getCarPromise(event.target.dataset.id)
             .then(data => {
                 updateName.value = data.name
