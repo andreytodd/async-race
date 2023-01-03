@@ -19,6 +19,7 @@ import {
     renderWinners,
     updateWinnersCount,
     updateGarageCount,
+    displayRaceInfo,
 } from './view/render.js';
 import Header from './view/components/Main/Header.js';
 import Main from './view/components/Main/Main.js';
@@ -31,6 +32,7 @@ import WinnersTable from './view/components/Winners/WinnersTable.js';
 import WinnersHeading from './view/components/Winners/WinnersHeading.js';
 import WinnersTableDiv from './view/components/Winners/WinnersTableDiv.js';
 import WinnersPagination from './view/components/Winners/WinnersPagination.js';
+import RaceScreen from './view/components/Garage/RaceScreen.js';
 
 /* Create HTML structure */
 
@@ -47,11 +49,11 @@ const garagePage = document.getElementById('garage-page');
 garagePage.prepend(GarageCount);
 updateGarageCount();
 garagePage.prepend(RaceButtons);
+garagePage.prepend(RaceScreen);
 garagePage.prepend(Form);
 garagePage.append(PagesGarage);
 
 const pageNumberGarage = document.getElementById('page-number');
-renderCars(pageNumberGarage.innerHTML);
 checkNextGarage();
 
 /* Winners Page rendering */
@@ -65,7 +67,7 @@ updateWinnersCount();
 winnersPage.append(WinnersPagination);
 
 const pageNumberWinners = document.getElementById('page-number-winners');
-renderWinners(1);
+
 checkNextWinners();
 
 /* Define elements */
@@ -73,11 +75,14 @@ checkNextWinners();
 /* General elements */
 
 const garage = document.getElementById('garage');
+renderCars(pageNumberGarage.innerHTML, garage);
 const garageSwitcher = document.getElementById('garage-switcher');
 const winnersSwitcher = document.getElementById('winners-switcher');
 let selectedId;
 let raceResults = {};
 const winsTable = document.getElementById('winsTable');
+renderWinners(winsTable, 1);
+const raceScreen = document.querySelector('.garage-page__race-screen');
 
 /* Form elements */
 
@@ -144,7 +149,7 @@ function checkNextWinners() {
     });
 }
 
-    /* Race functions */
+/* Race functions */
 
 async function startEngineAndAnimation(id) {
     const selectedCar = document.getElementById(id);
@@ -167,7 +172,7 @@ async function startRace(id) {
             raceResults[id] = 10000;
             selectedCar.classList.add('paused');
             console.log(err);
-            console.log(`Number ${id} has broken down!`);
+            displayRaceInfo(`Number ${id} has broken down!`, raceScreen);
         });
 }
 
@@ -180,6 +185,8 @@ async function announceWinner() {
     const bestTime = Math.min(...allTimes);
     const winnerId = +getKeyByValue(raceResults, bestTime);
     const response = await getWinner(winnerId);
+    console.log(winnerId)
+    displayRaceInfo(`The winner is number ${winnerId}! &#x1F3C6`, raceScreen);
     if (response.ok) {
         const winnerCar = await response.json();
         const wins = winnerCar.wins + 1;
@@ -202,7 +209,7 @@ createBtn.addEventListener('click', () => {
         createCar(createName.value, createColor.value);
     }
     createName.value = '';
-    renderCars(pageNumberGarage.innerHTML);
+    renderCars(pageNumberGarage.innerHTML, garage);
     checkNextGarage();
     updateGarageCount();
 });
@@ -213,7 +220,7 @@ updateBtn.addEventListener('click', () => {
         updateName.disabled = true;
         updateBtn.disabled = true;
         updateName.value = '';
-        renderWinners(1);
+        renderWinners(winsTable, 1);
     }
 });
 
@@ -222,6 +229,7 @@ updateBtn.addEventListener('click', () => {
 raceBtn.addEventListener('click', async () => {
     resetBtn.disabled = true;
     raceBtn.disabled = true;
+    raceScreen.innerHTML = '<p>Let the race begin!</p>'
     const allRacers = document.querySelectorAll('.car__racer__svg');
     const startEnginePromises = [];
     raceResults = {};
@@ -237,7 +245,7 @@ raceBtn.addEventListener('click', async () => {
     announceWinner();
     resetBtn.disabled = false;
     setTimeout(() => {
-        renderWinners(1, sortBy, order);
+        renderWinners(winsTable, 1, sortBy, order);
         updateWinnersCount();
         checkNextWinners();
     }, 2000);
@@ -252,6 +260,7 @@ resetBtn.addEventListener('click', async () => {
         racer.classList.remove('animated');
         racer.classList.remove('paused');
         stopEngine(racer.id);
+        raceScreen.innerHTML = '<p>Press RACE to start</p>';
     });
 });
 
@@ -259,7 +268,7 @@ generateBtn.addEventListener('click', () => {
     for (let i = 0; i < 100; i++) {
         createRandomCar();
     }
-    setTimeout(() => renderCars(pageNumberGarage.innerHTML), 100);
+    setTimeout(() => renderCars(pageNumberGarage.innerHTML, garage), 100);
     checkNextGarage();
 });
 
@@ -285,8 +294,8 @@ garage.addEventListener('click', async (event) => {
         deleteCar(id);
         deleteWinner(id);
         updateGarageCount();
-        renderCars(pageNumberGarage.innerHTML);
-        renderWinners(1, sortBy, order);
+        renderCars(pageNumberGarage.innerHTML, garage);
+        renderWinners(winsTable, 1, sortBy, order);
         pageNumberWinners.innerHTML = '1';
         updateWinnersCount();
         checkNextGarage();
@@ -319,7 +328,7 @@ nextBtn.addEventListener('click', () => {
     pageNumberGarage.innerHTML = (Number(pageNumberGarage.innerHTML) + 1);
     previousBtn.disabled = false;
     garage.innerHTML = '';
-    renderCars(pageNumberGarage.innerHTML);
+    renderCars(pageNumberGarage.innerHTML, garage);
     checkNextGarage();
 });
 
@@ -327,13 +336,13 @@ previousBtn.addEventListener('click', () => {
     if (pageNumberGarage.innerHTML === '2') {
         pageNumberGarage.innerHTML = (Number(pageNumberGarage.innerHTML) - 1);
         garage.innerHTML = '';
-        renderCars(pageNumberGarage.innerHTML);
+        renderCars(pageNumberGarage.innerHTML, garage);
         previousBtn.disabled = true;
         checkNextGarage();
     } else {
         pageNumberGarage.innerHTML = (Number(pageNumberGarage.innerHTML) - 1);
         garage.innerHTML = '';
-        renderCars(pageNumberGarage.innerHTML);
+        renderCars(pageNumberGarage.innerHTML, garage);
         checkNextGarage();
     }
 });
@@ -348,10 +357,10 @@ WinnersHeading.addEventListener('click', (event) => {
     if (!event.target.dataset.sort) {
         return;
     } else if (order === 'ASC') {
-        renderWinners(1, sortBy, order);
+        renderWinners(winsTable, 1, sortBy, order);
         event.target.dataset.order = 'DESC';
     } else {
-        renderWinners(1, sortBy, order);
+        renderWinners(winsTable, 1, sortBy, order);
         event.target.dataset.order = 'ASC';
     }
 });
@@ -362,7 +371,7 @@ nextBtnWinners.addEventListener('click', () => {
     pageNumberWinners.innerHTML = (Number(pageNumberWinners.innerHTML) + 1);
     previousBtnWinners.disabled = false;
     winsTable.innerHTML = '';
-    renderWinners(pageNumberWinners.innerHTML, sortBy, order);
+    renderWinners(winsTable, pageNumberWinners.innerHTML, sortBy, order);
     checkNextWinners();
 });
 
@@ -372,11 +381,11 @@ previousBtnWinners.addEventListener('click', () => {
         winsTable.innerHTML = '';
         previousBtnWinners.disabled = true;
         checkNextWinners();
-        renderWinners(pageNumberWinners.innerHTML, sortBy, order);
+        renderWinners(winsTable, pageNumberWinners.innerHTML, sortBy, order);
     } else {
         pageNumberWinners.innerHTML = (Number(pageNumberWinners.innerHTML) - 1);
         winsTable.innerHTML = '';
-        renderWinners(pageNumberWinners.innerHTML, sortBy, order);
+        renderWinners(winsTable, pageNumberWinners.innerHTML, sortBy, order);
         checkNextWinners();
     }
 });

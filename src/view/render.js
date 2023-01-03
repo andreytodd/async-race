@@ -15,15 +15,21 @@ if (!node) return;
 node.innerHTML = (typeof template === 'function' ? template() : template);
 }
 
-export function renderCars(page) {
+export function renderCars(page, element) {
     getCarsPromise(page)
     .then((cars) => cars.forEach((car) => {
 const carDiv = document.createElement('div');
 carDiv.id = `id_${car.id}`;
 carDiv.classList.add('garage__car');
 render(CarBlock(car.name, car.color, car.id), carDiv);
-garage.append(carDiv);
+element.append(carDiv);
     }));
+}
+
+export function displayRaceInfo(text, node) {
+const textNode = document.createElement('p');
+render(text, textNode);
+node.prepend(textNode);
 }
 
 export function updateAndRenderCar(name, color, id) {
@@ -53,8 +59,8 @@ GarageCount.textContent = `Garage (${data.length})`;
 });
 }
 
-export async function renderWinners(page, sort, order) {
-winsTable.innerHTML = '';
+export async function renderWinners(el, page, sort, order) {
+el.innerHTML = '';
 getWinners(sort, page, order)
 .then((winners) => winners.forEach((winner) => {
 const winnerDiv = document.createElement('tr');
@@ -108,6 +114,6 @@ winnerDiv.innerHTML = `
 
 `;
 });
-winsTable.append(winnerDiv);
+el.append(winnerDiv);
 }));
 }
