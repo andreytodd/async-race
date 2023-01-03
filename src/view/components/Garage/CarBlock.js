@@ -1,4 +1,4 @@
-import { carImage } from "../../../assets/carImage.js"
+import { carImage } from '../../../assets/carImage.js';
 
 export function CarBlock(name, color, id) {
     return `
@@ -10,5 +10,5 @@ export function CarBlock(name, color, id) {
     <div class="car__racer">
         ${carImage(color, id)}
     </div>
-    `
+    `;
 }

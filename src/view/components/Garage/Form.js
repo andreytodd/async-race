@@ -1,5 +1,5 @@
-const Form = document.createElement('div')
-Form.classList.add('garage-page__cars-form')
+const Form = document.createElement('div');
+Form.classList.add('garage-page__cars-form');
 Form.innerHTML = `
     <div class="cars-form create-car">
         <div class="create-car__input">
@@ -15,6 +15,6 @@ Form.innerHTML = `
         </div>
         <button id="update-btn" disabled="true">Update</button>
     </div>
-`
+`;
 
-export default Form
+export default Form;

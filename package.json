@@ -4,7 +4,8 @@
   "description": "Fun with promises",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "build": "webpack"
   },
   "author": "mikhama",
   "license": "MIT",
@@ -12,10 +13,20 @@
     "babel-preset-airbnb": "^5.0.0",
     "eslint": "^8.31.0",
     "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-node": "^4.1.0",
+    "eslint-config-prettier": "^8.6.0",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-jsx-a11y": "^6.6.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-react": "^7.31.11",
     "eslint-plugin-react-hooks": "^4.6.0",
-    "json-server": "^0.16.3"
+    "json-server": "^0.16.3",
+    "prettier": "^2.8.1",
+    "webpack": "^5.75.0",
+    "webpack-cli": "^5.0.1"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
   }
 }
