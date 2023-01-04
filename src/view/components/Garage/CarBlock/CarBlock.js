@@ -1,4 +1,4 @@
-import { carImage } from '../../../assets/carImage.js';
+import { carImage } from '../../../../assets/carImage.js';
 
 export function CarBlock(name, color, id) {
     return `

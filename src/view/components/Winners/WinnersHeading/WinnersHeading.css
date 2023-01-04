@@ -1,0 +1,16 @@
+.winners__heading {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    width: 80vw;
+}
+
+.winners__heading p {
+    width: 120px;
+}
+
+.winners__heading p:nth-of-type(3),
+.winners__heading p:nth-of-type(4),
+.winners__heading p:nth-of-type(5) {
+    cursor: pointer;
+}

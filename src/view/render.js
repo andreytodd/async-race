@@ -5,10 +5,10 @@ createCar,
 getWinners,
 getCarPromise,
 } from '../store/serverAPI.js';
-import { CarBlock } from './components/Garage/CarBlock.js';
+import { CarBlock } from './components/Garage/CarBlock/CarBlock.js';
 import { randomColor, randomCar } from '../store/carData.js';
-import WinnersCount from './components/Winners/WinnersCount.js';
-import GarageCount from './components/Garage/GarageCount.js';
+import WinnersCount from './components/Winners/WinnersCounter/WinnersCount.js';
+import GarageCount from './components/Garage/GarageCounter/GarageCount.js';
 
 export function render(template, node) {
 if (!node) return;

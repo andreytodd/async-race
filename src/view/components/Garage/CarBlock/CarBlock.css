@@ -1,0 +1,71 @@
+.garage__car {
+    height: 170px;
+    position: relative;
+}
+
+.car__racer {
+    position: relative;
+}
+
+.car__racer svg {
+    position: absolute;
+}
+
+.car__racer svg.animated {
+    position: absolute;
+    animation: linear;
+    animation-name: drive;
+   animation-fill-mode: forwards;
+}
+
+.car__racer svg.paused{
+        -webkit-animation-play-state:paused;
+        -moz-animation-play-state:paused;
+        -o-animation-play-state:paused;
+        animation-play-state:paused;
+    }
+
+
+@keyframes drive {
+    0% {
+      left: 0;
+    }
+    100% {
+      left: calc(95vw - 120px);
+    }
+}
+
+.car__racer::before {
+    content: '';
+    position: absolute;
+    border-radius: 2px;
+    bottom: -60px;
+    height: 30px;
+    width: 98.5vw;
+    transform: skewX(-30deg);
+    /* background-color: rgb(64, 62, 62); */
+    background-image: linear-gradient(to right, #434343 0%, black 100%);
+    z-index: -1;
+}
+
+.car__racer::after {
+    content: '';
+    position: absolute;
+    width: 97vw;
+    bottom: -43px;
+    background-image: repeating-linear-gradient(338deg, transparent 0 10px, #FFFFFF 10px 20px);
+    height: 2px;
+    z-index: -1;
+}
+
+.garage__car::before {
+    content: '';
+    position: absolute;
+    bottom: 45px;
+    right: 130px;
+    height: 28px;
+    transform: skewX(-35deg);
+    z-index: 0;
+    width: 20px;
+    background: repeating-conic-gradient(from 0deg, #000000 0% 25%, #FFFFFF 0% 50%) 50%/10px 10px;
+}

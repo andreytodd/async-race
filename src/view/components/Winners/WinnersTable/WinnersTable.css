@@ -1,0 +1,24 @@
+.winners__table {
+    width: 80vw;
+}
+
+.winners__table td {
+    width: 120px;
+    display: flex;
+    align-items: center;
+}
+
+.winners__table__car {
+    display: flex;
+    justify-content: space-between;
+}
+
+.winners__table__car__info {
+    display: flex;
+    width: 65vw;
+    justify-content: space-between;
+}
+
+.winners__table__car__image {
+    align-content: flex-end;
+}

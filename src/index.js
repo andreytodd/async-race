@@ -21,18 +21,18 @@ import {
     updateGarageCount,
     displayRaceInfo,
 } from './view/render.js';
-import Header from './view/components/Main/Header.js';
-import Main from './view/components/Main/Main.js';
-import Form from './view/components/Garage/Form.js';
-import RaceButtons from './view/components/Garage/RaceButtons.js';
-import PagesGarage from './view/components/Garage/PagesGarage.js';
-import GarageCount from './view/components/Garage/GarageCount.js';
-import WinnersCount from './view/components/Winners/WinnersCount.js';
-import WinnersTable from './view/components/Winners/WinnersTable.js';
-import WinnersHeading from './view/components/Winners/WinnersHeading.js';
-import WinnersTableDiv from './view/components/Winners/WinnersTableDiv.js';
-import WinnersPagination from './view/components/Winners/WinnersPagination.js';
-import RaceScreen from './view/components/Garage/RaceScreen.js';
+import Header from './view/components/Main/Header/Header.js';
+import Main from './view/components/Main/MainBlock/Main.js';
+import Form from './view/components/Garage/Form/Form.js';
+import RaceButtons from './view/components/Garage/RaceButtons/RaceButtons.js';
+import PagesGarage from './view/components/Garage/GaragePagination/PagesGarage.js';
+import GarageCount from './view/components/Garage/GarageCounter/GarageCount.js';
+import WinnersCount from './view/components/Winners/WinnersCounter/WinnersCount.js';
+import WinnersTable from './view/components/Winners/WinnersTable/WinnersTable.js';
+import WinnersHeading from './view/components/Winners/WinnersHeading/WinnersHeading.js';
+import WinnersTableDiv from './view/components/Winners/WinnersTableDiv/WinnersTableDiv.js';
+import WinnersPagination from './view/components/Winners/WinnersPagination/WinnersPagination.js';
+import RaceScreen from './view/components/Garage/RaceScreen/RaceScreen.js';
 
 /* Create HTML structure */
 
@@ -66,8 +66,7 @@ WinnersTableDiv.append(WinnersTable);
 updateWinnersCount();
 winnersPage.append(WinnersPagination);
 
-const pageNumberWinners = document.getElementById('page-number-winners');
-
+const pageNumberWinners = document.getElementById('page-number-winners')
 checkNextWinners();
 
 /* Define elements */
@@ -157,10 +156,10 @@ async function startEngineAndAnimation(id) {
     raceButton.disabled = true;
     await startEngine(id)
         .then((data) => {
-            selectedCar.classList.add('animated');
             const animationTime = (data.distance / 1000 / data.velocity).toFixed(2);
-            selectedCar.style.animationDuration = (`${animationTime + 1}s`);
+            selectedCar.style.animationDuration = (`${animationTime}s`);
             raceResults[id] = +animationTime;
+            selectedCar.classList.add('animated');
     });
 }
 
@@ -185,8 +184,7 @@ async function announceWinner() {
     const bestTime = Math.min(...allTimes);
     const winnerId = +getKeyByValue(raceResults, bestTime);
     const response = await getWinner(winnerId);
-    console.log(winnerId)
-    displayRaceInfo(`The winner is number ${winnerId}! &#x1F3C6`, raceScreen);
+    if (bestTime !== 10000) {displayRaceInfo(`The winner is number ${winnerId}, with the result ${bestTime}s! &#x1F3C6`, raceScreen);}
     if (response.ok) {
         const winnerCar = await response.json();
         const wins = winnerCar.wins + 1;
@@ -231,17 +229,17 @@ raceBtn.addEventListener('click', async () => {
     raceBtn.disabled = true;
     raceScreen.innerHTML = '<p>Let the race begin!</p>'
     const allRacers = document.querySelectorAll('.car__racer__svg');
-    const startEnginePromises = [];
+    const startEngineRequest = [];
     raceResults = {};
     allRacers.forEach((racer) => {
-        startEnginePromises.push(startEngineAndAnimation(racer.id));
+        startEngineRequest.push(startEngineAndAnimation(racer.id));
     });
-    await Promise.all(startEnginePromises);
-    const startDrivePromises = [];
+    await Promise.all(startEngineRequest);
+    const startDriveRequests = [];
     allRacers.forEach((racer) => {
-        startDrivePromises.push(startRace(racer.id));
+        startDriveRequests.push(startRace(racer.id));
     });
-    await Promise.all(startDrivePromises);
+    await Promise.any(startDriveRequests);
     announceWinner();
     resetBtn.disabled = false;
     setTimeout(() => {
