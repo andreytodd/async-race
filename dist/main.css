@@ -1,0 +1,170 @@
+.garage__car {
+    height: 170px;
+    position: relative;
+}
+
+.car__racer {
+    position: relative;
+}
+
+.car__racer svg {
+    position: absolute;
+}
+
+.car__racer svg.animated {
+    animation: linear;
+    animation-name: drive;
+    animation-fill-mode: forwards;
+}
+
+.car__racer svg.paused{
+        animation-play-state:paused;
+    }
+
+
+@keyframes drive {
+    0% {
+      left: 0;
+    }
+    100% {
+      left: calc(95vw - 120px);
+    }
+}
+
+.car__racer::before {
+    content: '';
+    position: absolute;
+    border-radius: 2px;
+    bottom: -60px;
+    height: 30px;
+    width: 98.5vw;
+    transform: skewX(-30deg);
+    /* background-color: rgb(64, 62, 62); */
+    background-image: linear-gradient(to right, #434343 0%, black 100%);
+    z-index: -1;
+}
+
+.car__racer::after {
+    content: '';
+    position: absolute;
+    width: 97vw;
+    bottom: -43px;
+    background-image: repeating-linear-gradient(338deg, transparent 0 10px, #FFFFFF 10px 20px);
+    height: 2px;
+    z-index: -1;
+}
+
+.garage__car::before {
+    content: '';
+    position: absolute;
+    bottom: 45px;
+    right: 130px;
+    height: 28px;
+    transform: skewX(-35deg);
+    z-index: 0;
+    width: 20px;
+    background: repeating-conic-gradient(from 0deg, #000000 0% 25%, #FFFFFF 0% 50%) 50%/10px 10px;
+}
+input[type="text"] {
+    font-family: 'VT323', monospace;
+}
+
+input:focus{
+    outline: none;
+}
+
+.cars-form {
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+}
+
+.garage-page__cars-form {
+    margin-bottom: 30px;
+    width: 300px;
+    display: inline-block;
+}
+
+.garage-page__cars-form input {
+    border: none;
+    height: 30px;
+    padding: 0;
+    margin: 0;
+    border-radius: 10px;
+}
+
+.garage-page__cars-form button {
+    height: 25px;
+    width: 70px;
+}
+
+#color-create, #color-update {
+    width: 30px;
+    height: 30px;
+    background: transparent;
+    border-radius: 10px;
+    appearance: none;
+}
+
+.create-car__input, .update-car__input {
+    display: inline-block;
+    height: 30px;
+    padding: 0 10px;
+    margin-right: 20px;
+    display: flex;
+    align-items: center;
+    border: 1px solid black;
+    background-color: #FFF;
+    border-radius: 10px;
+}
+
+.garage-page__race-buttons {
+    margin-bottom: 20px;
+}
+
+.garage-page__race-buttons button {
+    width: 110px;
+    height: 25px;
+}
+.garage-page__count {
+    margin-bottom: 20px;
+    font-size: 20px;
+    font-style: italic;
+    color: #514e4e;
+}
+.garage-page__pagination {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100px;
+}
+body {
+    margin: 0;
+    padding: 0;
+    background-color: rgb(206, 212, 212);
+    color: #000;
+    font-family: 'Sedgwick Ave', cursive;
+    font-family: 'VT323', monospace;
+    letter-spacing: 1px;
+}
+
+#wrapper {
+    padding: 0 20px 0 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Buttons */
+
+button {
+    font-family: 'VT323', monospace;
+}
+
+button:disabled, button:disabled:hover {
+    background-color: #bbb5b5;
+    cursor:initial
+}
+
+button:hover {
+  background-color: #918f2b;
+}

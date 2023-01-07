@@ -12,16 +12,12 @@
 }
 
 .car__racer svg.animated {
-    position: absolute;
     animation: linear;
     animation-name: drive;
-   animation-fill-mode: forwards;
+    animation-fill-mode: forwards;
 }
 
 .car__racer svg.paused{
-        -webkit-animation-play-state:paused;
-        -moz-animation-play-state:paused;
-        -o-animation-play-state:paused;
         animation-play-state:paused;
     }
 

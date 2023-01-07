@@ -1,3 +1,9 @@
+@import url('../src/view/components/Garage/CarBlock/CarBlock.css');
+@import url('../src/view/components/Garage/Form/Form.css');
+@import url('../src/view/components/Garage/GarageCounter/GarageCount.css');
+@import url('../src/view/components/Garage/GaragePagination/PagesGarage.css');
+
+
 body {
     margin: 0;
     padding: 0;

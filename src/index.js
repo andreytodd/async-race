@@ -33,6 +33,18 @@ import WinnersHeading from './view/components/Winners/WinnersHeading/WinnersHead
 import WinnersTableDiv from './view/components/Winners/WinnersTableDiv/WinnersTableDiv.js';
 import WinnersPagination from './view/components/Winners/WinnersPagination/WinnersPagination.js';
 import RaceScreen from './view/components/Garage/RaceScreen/RaceScreen.js';
+// import sheet from './styles.css' assert { type: 'css' };
+// import HeaderCss from './view/components/Main/Header/Header.css' assert { type: 'css' };
+// import GarageCss from './view/components/Garage/Form/Form.css' assert { type: 'css' };
+// import RaceScreenCss from './view/components/Garage/RaceScreen/RaceScreen.css' assert { type: 'css' };
+// import GarageCountCss from './view/components/Garage/GarageCounter/GarageCount.css' assert { type: 'css' };
+// import CarBlockCss from './view/components/Garage/CarBlock/CarBlock.css' assert { type: 'css' };
+// import PagesGarageCss from './view/components/Garage/GaragePagination/PagesGarage.css' assert { type: 'css' };
+// import WinnersHeadingCss from './view/components/Winners/WinnersHeading/WinnersHeading.css' assert { type: 'css' };
+// import WinnersTableCss from './view/components/Winners/WinnersTable/WinnersTable.css' assert { type: 'css' };
+// import WinnersPaginationCss from './view/components/Winners/WinnersPagination/WinnersPagination.css' assert { type: 'css' };
+// import WinnersTableDivCss from './view/components/Winners//WinnersTableDiv/WinnersTableDiv.css' assert { type: 'css' };
+// document.adoptedStyleSheets = [sheet, HeaderCss, GarageCss, RaceScreenCss, GarageCountCss, CarBlockCss, PagesGarageCss, WinnersHeadingCss, WinnersTableCss, WinnersPaginationCss, WinnersTableDivCss];
 
 /* Create HTML structure */
 
@@ -66,7 +78,7 @@ WinnersTableDiv.append(WinnersTable);
 updateWinnersCount();
 winnersPage.append(WinnersPagination);
 
-const pageNumberWinners = document.getElementById('page-number-winners')
+const pageNumberWinners = document.getElementById('page-number-winners');
 checkNextWinners();
 
 /* Define elements */
@@ -184,7 +196,7 @@ async function announceWinner() {
     const bestTime = Math.min(...allTimes);
     const winnerId = +getKeyByValue(raceResults, bestTime);
     const response = await getWinner(winnerId);
-    if (bestTime !== 10000) {displayRaceInfo(`The winner is number ${winnerId}, with the result ${bestTime}s! &#x1F3C6`, raceScreen);}
+    if (bestTime !== 10000) { displayRaceInfo(`The winner is number ${winnerId}, with the result ${bestTime}s! &#x1F3C6`, raceScreen); }
     if (response.ok) {
         const winnerCar = await response.json();
         const wins = winnerCar.wins + 1;
@@ -227,7 +239,7 @@ updateBtn.addEventListener('click', () => {
 raceBtn.addEventListener('click', async () => {
     resetBtn.disabled = true;
     raceBtn.disabled = true;
-    raceScreen.innerHTML = '<p>Let the race begin!</p>'
+    raceScreen.innerHTML = '<p>Let the race begin!</p>';
     const allRacers = document.querySelectorAll('.car__racer__svg');
     const startEngineRequest = [];
     raceResults = {};
@@ -239,7 +251,7 @@ raceBtn.addEventListener('click', async () => {
     allRacers.forEach((racer) => {
         startDriveRequests.push(startRace(racer.id));
     });
-    await Promise.any(startDriveRequests);
+    await Promise.all(startDriveRequests);
     announceWinner();
     resetBtn.disabled = false;
     setTimeout(() => {
@@ -263,7 +275,7 @@ resetBtn.addEventListener('click', async () => {
 });
 
 generateBtn.addEventListener('click', () => {
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < 100; i += 1) {
         createRandomCar();
     }
     setTimeout(() => renderCars(pageNumberGarage.innerHTML, garage), 100);
