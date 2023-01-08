@@ -1,7 +1,35 @@
-@import url('../src/view/components/Garage/CarBlock/CarBlock.css');
-@import url('../src/view/components/Garage/Form/Form.css');
-@import url('../src/view/components/Garage/GarageCounter/GarageCount.css');
-@import url('../src/view/components/Garage/GaragePagination/PagesGarage.css');
+@font-face {
+    font-family: 'Bangers';
+    font-style: normal;
+    font-weight: 400;
+    src:
+        url('./assets/fonts/bangers-v20-latin-regular.woff') format('woff'),
+        url('./assets/fonts/bangers-v20-latin-regular.woff2') format('woff2');
+}
+
+/* vt323-regular - latin */
+@font-face {
+    font-family: 'VT323';
+    font-style: normal;
+    font-weight: 400;
+    src:
+        url('./assets/fonts/vt323-v17-latin-regular.woff') format('woff'),
+        url('./assets/fonts/vt323-v17-latin-regular.woff2') format('woff2');
+}
+
+@import url("./view/components/Main/Header/Header.css");
+@import url("./view/components/Garage/Form/Form.css");
+@import url("./view/components/Garage/RaceScreen/RaceScreen.css");
+@import url("./view/components/Garage/GarageCounter/GarageCount.css");
+@import url("./view/components/Garage/CarBlock/CarBlock.css");
+@import url("./view/components/Garage/GaragePagination/PagesGarage.css");
+@import url("./view/components/Winners/WinnersHeading/WinnersHeading.css");
+@import url("./view/components/Winners/WinnersTable/WinnersTable.css");
+@import url("./view/components/Winners/WinnersPagination/WinnersPagination.css");
+@import url("./view/components/Winners//WinnersTableDiv/WinnersTableDiv.css");
+
+/* sedgwick-ave-regular - latin */
+
 
 
 body {

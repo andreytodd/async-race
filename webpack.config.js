@@ -19,6 +19,15 @@ module.exports = {
                 test: /\.css$/,
                 use: [MiniCssExtractPlugin.loader, 'css-loader'],
             },
+            {
+                test: /\.(woff|woff2)$/,
+                use: [{
+                    loader: 'file-loader',
+                    options: {
+                        outputPath: 'font'
+                    }
+                }],
+              },
         ],
     },
     plugins: [
@@ -28,6 +37,6 @@ module.exports = {
     new CleanWebpackPlugin(),
     new MiniCssExtractPlugin({
         filename: '[name].css',
-      }),
+      })
     ],
 };
