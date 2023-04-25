@@ -33,18 +33,6 @@ import WinnersHeading from './view/components/Winners/WinnersHeading/WinnersHead
 import WinnersTableDiv from './view/components/Winners/WinnersTableDiv/WinnersTableDiv.js';
 import WinnersPagination from './view/components/Winners/WinnersPagination/WinnersPagination.js';
 import RaceScreen from './view/components/Garage/RaceScreen/RaceScreen.js';
-// import sheet from './styles.css' assert { type: 'css' };
-// import HeaderCss from './view/components/Main/Header/Header.css' assert { type: 'css' };
-// import GarageCss from './view/components/Garage/Form/Form.css' assert { type: 'css' };
-// import RaceScreenCss from './view/components/Garage/RaceScreen/RaceScreen.css' assert { type: 'css' };
-// import GarageCountCss from './view/components/Garage/GarageCounter/GarageCount.css' assert { type: 'css' };
-// import CarBlockCss from './view/components/Garage/CarBlock/CarBlock.css' assert { type: 'css' };
-// import PagesGarageCss from './view/components/Garage/GaragePagination/PagesGarage.css' assert { type: 'css' };
-// import WinnersHeadingCss from './view/components/Winners/WinnersHeading/WinnersHeading.css' assert { type: 'css' };
-// import WinnersTableCss from './view/components/Winners/WinnersTable/WinnersTable.css' assert { type: 'css' };
-// import WinnersPaginationCss from './view/components/Winners/WinnersPagination/WinnersPagination.css' assert { type: 'css' };
-// import WinnersTableDivCss from './view/components/Winners//WinnersTableDiv/WinnersTableDiv.css' assert { type: 'css' };
-// document.adoptedStyleSheets = [sheet, HeaderCss, GarageCss, RaceScreenCss, GarageCountCss, CarBlockCss, PagesGarageCss, WinnersHeadingCss, WinnersTableCss, WinnersPaginationCss, WinnersTableDivCss];
 
 /* Create HTML structure */
 
