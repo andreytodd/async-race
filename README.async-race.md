@@ -1,5 +1,5 @@
 # Async-Race
-## Async-Race is a simple racing game built with vanilla JavaScript, HTML, and CSS. It is a course project that focuses on working with backend server and async data, JS, and the DOM tree. With Async-Race, users can create, edit, and delete cars, race them, and see the list of winners.
+Async-Race is a simple racing game built with vanilla JavaScript, HTML, and CSS. It is a course project that focuses on working with backend server and async data, JS, and the DOM tree. With Async-Race, users can create, edit, and delete cars, race them, and see the list of winners.
 
 ## Getting Started
 To run Async-Race on your local machine, follow these steps:
