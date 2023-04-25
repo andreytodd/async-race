@@ -7,7 +7,7 @@ To run Async-Race on your local machine, follow these steps:
 - Clone the project repository to your local machine: $ git clone https://github.com/mikhama/async-race-api.git
 - Install the dependencies by running the command npm install.
 - Start the development server by running the command npm start.
-- Open your web browser and navigate to http://localhost:3000 to view the application.
+- Open your web browser and navigate to https://andreytodd.github.io/async-race/src/ to view the application.
 
 ## Features
 Async-Race comes with the following features:
