@@ -24,7 +24,7 @@ module.exports = {
                 use: [{
                     loader: 'file-loader',
                     options: {
-                        outputPath: 'font'
+                        outputPath: 'fonts'
                     }
                 }],
               },
